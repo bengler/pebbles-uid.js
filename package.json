@@ -1,0 +1,23 @@
+{
+  "name": "pebbles-uid",
+  "version": "0.0.1",
+  "description": "Utility belt for working with Pebbles based Uids",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
+  },
+  "author": "Bjørge Næss",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "bengler/pebbles-uid.js"
+  },
+  "keywords": [
+    "pebbles",
+    "uid"
+  ],
+  "devDependencies": {
+    "mocha": "~1.14.0",
+    "should": "~2.0.2"
+  }
+}
