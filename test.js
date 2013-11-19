@@ -43,6 +43,10 @@ describe('Uid', function() {
     uid = new Uid('klass', 'some.path', 'oid');
     return uid.toString().should.eql("klass:some.path$oid");
   });
+  it("allows numeric oids", function() {
+    var uid = new Uid('klass', 'some.path', 343);
+    return uid.toString().should.eql("klass:some.path$343");
+  });
   it("raises an error if parameter is neither string or hash", function() {
     (function() {
       return Uid.parse([]);

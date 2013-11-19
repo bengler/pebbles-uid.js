@@ -144,7 +144,7 @@ Uid.isValidPath = function (path) {
 };
 
 Uid.isValidOid = function (oid) {
-  return !!oid && oid.indexOf('/') === -1;
+  return (typeof oid === "number") || (!!oid && oid.indexOf('/') === -1)
 };
 
 function isValidLabel(label) {
