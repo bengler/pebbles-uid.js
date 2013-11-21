@@ -1,5 +1,7 @@
 var slice = [].slice;
 
+var path = require("path")
+
 // Todo: factor out!
 // Pebbles path
 // Takes either an array, or a '.' delimited string and provides methods for manipulating the path.
@@ -41,6 +43,18 @@ PebblesPath.prototype.parent = function parent() {
   var cloned = this._path.slice();
   cloned.pop();
   return new PebblesPath(cloned)
+};
+
+PebblesPath.prototype.append = function append(tail) {
+  return this.cd(tail);
+};
+
+PebblesPath.prototype.cd = function cd(dest) {
+  var cloned = this._path.slice();
+  var newPath = path.join(cloned.join("/"), dest).split("/").filter(function(p) {
+    return !(p === '' || p === '.' || p === '..')
+  });
+  return new PebblesPath(newPath)
 };
 
 PebblesPath.prototype.child = function child(oid) {
