@@ -45,13 +45,15 @@ PebblesPath.prototype.parent = function parent() {
   return new PebblesPath(cloned)
 };
 
-PebblesPath.prototype.append = function append(tail) {
-  return this.cd(tail);
+PebblesPath.prototype.concat = function concat(tail) {
+  var args = slice.call(arguments)
+  if (args.length > 1) return new PebblesPath(this._path.concat(args));
+  return new PebblesPath(this._path.concat(tail.split(".")))
 };
 
 PebblesPath.prototype.cd = function cd(dest) {
   var cloned = this._path.slice();
-  var newPath = path.join(cloned.join("/"), dest).split("/").filter(function(p) {
+  var newPath = path.join(cloned.join(path.sep), dest).split(path.sep).filter(function(p) {
     return !(p === '' || p === '.' || p === '..')
   });
   return new PebblesPath(newPath)
