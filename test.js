@@ -6,14 +6,14 @@ describe('Uid', function() {
   it("can parse a string into an array", function() {
     var uid = Uid.parse("post:a.b.c$1");
     uid.klass().should.equal('post');
-    uid.path().should.equal('a.b.c');
+    uid.path().toString().should.equal('a.b.c');
     uid.oid().should.equal('1');
   });
 
   it("can create an Uid instance from a string", function() {
     var uid = Uid.parse("klass:path$oid");
     uid.klass().should.eql("klass");
-    uid.path().should.eql("path");
+    uid.path().toString().should.eql("path");
     uid.oid().should.eql("oid");
     uid.toString().should.eql("klass:path$oid");
   });
@@ -21,7 +21,7 @@ describe('Uid', function() {
   it("parses an uid with no oid correctly", function() {
     var uid = Uid.parse("klass:path");
     uid.klass().should.eql("klass");
-    uid.path().should.eql("path");
+    uid.path().toString().should.eql("path");
     should.not.exist(uid.oid());
     uid.toString().should.eql("klass:path");
   });
@@ -29,7 +29,7 @@ describe('Uid', function() {
   it("parses an uid with no path correctly", function() {
     var uid = Uid.parse("klass:$oid");
     uid.klass().should.eql("klass");
-    should.not.exist(uid.path());
+    uid.path().empty().should.be.true;
     uid.oid().should.eql("oid");
     uid.toString().should.eql("klass:$oid");
   });
@@ -95,7 +95,7 @@ describe('Uid', function() {
   describe('ChildPath', function() {
     return it("has a childPath", function() {
       var uid = new Uid("klass:some.old.path$oid");
-      return uid.children().path().should.eql("some.old.path.oid");
+      return uid.children().path().toString().should.eql("some.old.path.oid");
     });
   });
   describe("klass", function() {

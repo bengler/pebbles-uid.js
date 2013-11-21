@@ -19,6 +19,8 @@ InvalidUidError.prototype.constructor = InvalidUidError;
 
 var slice = [].slice;
 
+var PebblesPath = require("./path")
+
 function Uid(klass, path, oid) {
   var args = slice.call(arguments, 0);
   if (args.length === 1 && typeof klass === 'string') {
@@ -33,7 +35,7 @@ function Uid(klass, path, oid) {
   }
 
   this._klass = klass;
-  this._path = path;
+  this._path = new PebblesPath(path);
   this._oid = oid;
 
   this.validate('klass', 'path', 'oid');
@@ -87,7 +89,6 @@ Uid.prototype.with = function _with() {
   if (args.length === 1 && (typeof args[0] === 'object')) {
     args = [args[0].klass, args[0].path, args[0].oid];
   }
-
   var klass = isDefined(args[0]) ? args[0] : this._klass;
   var path = isDefined(args[1]) ? args[1] : this._path;
   var oid = isDefined(args[2]) ? args[2] : this._oid;
@@ -105,17 +106,15 @@ Uid.prototype.toString = function toString() {
 };
 
 Uid.prototype.parent = function parent() {
-  if (!this._path) throw new Error('Cannot get parent of an uid that is already at the top level: "'+this+'"');
-  var path = this._path.split(".");
-  var parentOid = path.pop();
-  return new Uid(this._klass, path.join(".") || null, parentOid);
+  if (this._path.empty()) throw new Error('Cannot get parent of an uid that is already at the top level: "'+this+'"');
+  var parentOid = this._path.last();
+  return new Uid(this._klass, this._path.parent(), parentOid);
 };
 
 Uid.prototype.children = function children() {
   var oid = this._oid;
   if (!isDefined(oid)) throw new Error("Cannot get child path of an uid without an oid");
-  var path = this._path;
-  return new Uid(this._klass, (path && path.split(".") || []).concat(oid).join("."));
+  return new Uid(this._klass, this._path.child(oid));
 };
 
 Uid.parse = function (uid) {
@@ -140,7 +139,7 @@ Uid.isValidKlass = function (klass) {
 };
 
 Uid.isValidPath = function (path) {
-  return path.split('.').every(isValidLabel);
+  return new PebblesPath(path).toArray().every(isValidLabel);
 };
 
 Uid.isValidOid = function (oid) {
