@@ -43,21 +43,21 @@ function Uid(klass, path, oid) {
 }
 
 Uid.prototype.clone = function clone() {
-  return this.with();
+  return this['with']();
 };
 
 Uid.prototype.klass = function klass(klass) {
-  if (arguments.length) return this.with("klass", klass);
+  if (arguments.length) return this['with']("klass", klass);
   return this._klass;
 };
 
 Uid.prototype.path = function path(path) {
-  if (arguments.length) return this.with("path", path);
+  if (arguments.length) return this['with']("path", path);
   return this._path;
 };
 
 Uid.prototype.oid = function oid(oid) {
-  if (arguments.length) return this.with("oid", oid);
+  if (arguments.length) return this['with']("oid", oid);
   return this._oid;
 };
 
@@ -79,12 +79,12 @@ Uid.prototype.validate = function validate() {
   return this;
 };
 
-Uid.prototype.with = function _with() {
+Uid.prototype['with'] = function _with() {
   var args = slice.call(arguments, 0);
   if (args.length === 2) {
     var w = {};
     w[args[0]] = args[1];
-    return this.with(w)
+    return this['with'](w)
   }
   if (args.length === 1 && (typeof args[0] === 'object')) {
     args = [args[0].klass, args[0].path, args[0].oid];
@@ -95,7 +95,7 @@ Uid.prototype.with = function _with() {
   return new Uid(klass, path, oid);
 };
 
-Uid.prototype.set = Uid.prototype.with;
+Uid.prototype.set = Uid.prototype['with'];
 Uid.prototype.get = function(prop) {
   return this['_'+prop];
 };

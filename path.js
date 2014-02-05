@@ -35,7 +35,7 @@ PebblesPath.prototype.toString = function toString() {
 };
 
 PebblesPath.prototype.realm = function last() {
-  if (arguments.length) return this.with("oid", oid);
+  if (arguments.length) return this['with']("oid", oid);
   return this._path[0]
 };
 
