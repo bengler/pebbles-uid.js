@@ -6,7 +6,7 @@ var Uid = require("pebbles-uid");
 var parent = Uid("foo.bar:baz.qux.quux$garply")
 
 var children = parent
-    .children()
+    .children
     .with("klass", "child.klass");
 
 console.log(""+parent +" is parent of "+children);

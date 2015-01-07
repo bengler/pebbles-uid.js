@@ -1,36 +1,36 @@
-var Uid = require("./");
+var Uid = require("./../index");
 var should = require("should");
 
 describe('Uid', function() {
 
   it("can parse a string into an array", function() {
     var uid = Uid.parse("post:a.b.c$1");
-    uid.klass().should.equal('post');
-    uid.path().toString().should.equal('a.b.c');
-    uid.oid().should.equal('1');
+    uid.klass.should.equal('post');
+    uid.path.toString().should.equal('a.b.c');
+    uid.oid.should.equal('1');
   });
 
   it("can create an Uid instance from a string", function() {
     var uid = Uid.parse("klass:path$oid");
-    uid.klass().should.eql("klass");
-    uid.path().toString().should.eql("path");
-    uid.oid().should.eql("oid");
+    uid.klass.should.eql("klass");
+    uid.path.toString().should.eql("path");
+    uid.oid.should.eql("oid");
     uid.toString().should.eql("klass:path$oid");
   });
 
   it("parses an uid with no oid correctly", function() {
     var uid = Uid.parse("klass:path");
-    uid.klass().should.eql("klass");
-    uid.path().toString().should.eql("path");
-    should.not.exist(uid.oid());
+    uid.klass.should.eql("klass");
+    uid.path.toString().should.eql("path");
+    should.not.exist(uid.oid);
     uid.toString().should.eql("klass:path");
   });
 
   it("parses an uid with no path correctly", function() {
     var uid = Uid.parse("klass:$oid");
-    uid.klass().should.eql("klass");
-    uid.path().empty().should.be.true;
-    uid.oid().should.eql("oid");
+    uid.klass.should.eql("klass");
+    uid.path.isEmpty.should.be.true;
+    uid.oid.should.eql("oid");
     uid.toString().should.eql("klass:$oid");
   });
 
@@ -66,36 +66,36 @@ describe('Uid', function() {
   describe('Parent', function() {
     it("has a parent", function() {
       var uid = new Uid("klass:some.parent.path$oid");
-      uid.parent().should.eql(new Uid("klass:some.parent$path"));
+      uid.parent.should.eql(new Uid("klass:some.parent$path"));
     });
     it("has a parent even without an oid", function() {
       var uid;
       uid = new Uid("klass:some.old.path");
-      return uid.parent().should.eql(new Uid("klass:some.old$path"));
+      return uid.parent.should.eql(new Uid("klass:some.old$path"));
     });
     it("has a parent even with only one label", function() {
       var uid = new Uid("klass:some");
-      return uid.parent().should.eql(Uid("klass:$some"));
+      return uid.parent.should.eql(Uid("klass:$some"));
     });
     return it("has a parent with a different klass", function() {
       var uid = new Uid("klass:some.old.path$oid");
-      return uid.parent().klass('otherklass').should.eql(Uid.parse("otherklass:some.old$path"));
+      return uid.parent.with('klass', 'otherklass').should.eql(Uid.parse("otherklass:some.old$path"));
     });
   });
   describe('Children', function() {
     it("has children", function() {
-      return Uid("klass:some.old.path$oid").children().should.eql(Uid("klass:some.old.path.oid"));
+      return Uid("klass:some.old.path$oid").children.should.eql(Uid("klass:some.old.path.oid"));
     });
     return it("has children with a different klass", function() {
       var uid;
       uid = new Uid("klass:some.old.path$oid");
-      return uid.children().klass('otherklass').should.eql(Uid("otherklass:some.old.path.oid"));
+      return uid.children.with('klass', 'otherklass').should.eql(Uid("otherklass:some.old.path.oid"));
     });
   });
   describe('ChildPath', function() {
     return it("has a childPath", function() {
       var uid = new Uid("klass:some.old.path$oid");
-      return uid.children().path().toString().should.eql("some.old.path.oid");
+      return uid.children.path.toString().should.eql("some.old.path.oid");
     });
   });
   describe("klass", function() {
@@ -155,7 +155,7 @@ describe('Uid', function() {
       Uid.isValidOid('abc/123').should.be.false;
     });
     it("can be missing", function() {
-      should.not.exist(Uid.parse('klass:path').oid());
+      should.not.exist(Uid.parse('klass:path').oid);
     });
     it("is not valid if it is null", function() {
       Uid.isValidOid(null).should.be.false;

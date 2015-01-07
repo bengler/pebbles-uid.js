@@ -1,10 +1,10 @@
 var slice = [].slice;
 
-var path = require("path")
+var prop = require("./prop");
+var path = require("path");
 
-// Todo: factor out!
 // Pebbles path
-// Takes either an array, or a '.' delimited string and provides methods for manipulating the path.
+// Takes either an array, or a '.' delimited string and provides methods for querying + manipulating a pebbles path.
 function PebblesPath(path) {
   if (!(this instanceof PebblesPath)) {
     return new PebblesPath(path);
@@ -20,61 +20,53 @@ function PebblesPath(path) {
   this._path = path || [];
 }
 
-PebblesPath.prototype.set = function set(index, label) {
-  var cloned = this._path.slice();
-  cloned[index] = label;
-  return new PebblesPath(cloned)
-};
-
-PebblesPath.prototype.empty = function isTopLevel() {
-  return this._path.length === 0;
-};
-
-PebblesPath.prototype.toString = function toString() {
-  return this._path.join(".")
-};
-
-PebblesPath.prototype.realm = function last() {
-  if (arguments.length) return this['with']("oid", oid);
-  return this._path[0]
-};
-
-PebblesPath.prototype.parent = function parent() {
-  var cloned = this._path.slice();
-  cloned.pop();
-  return new PebblesPath(cloned)
-};
-
-PebblesPath.prototype.concat = function concat(tail) {
-  var args = slice.call(arguments)
-  if (args.length > 1) return new PebblesPath(this._path.concat(args));
-  return new PebblesPath(this._path.concat(tail.split(".")))
-};
-
-PebblesPath.prototype.cd = function cd(dest) {
-  var cloned = this._path.slice();
-  var newPath = path.join(cloned.join(path.sep), dest).split(path.sep).filter(function(p) {
-    return !(p === '' || p === '.' || p === '..')
+prop(PebblesPath.prototype)
+  .method(function set(index, label) {
+    var cloned = this._path.slice();
+    cloned[index] = label;
+    return new PebblesPath(cloned)
+  })
+  .getter(function isEmpty() {
+    return this._path.length === 0;
+  })
+  .getter(function realm() {
+    return this._path[0]
+  })
+  .getter(function parent() {
+    var cloned = this._path.slice();
+    cloned.pop();
+    return new PebblesPath(cloned);
+  })
+  .method(function concat(tail) {
+    var args = slice.call(arguments);
+    if (args.length > 1) {
+      return new PebblesPath(this._path.concat(args));
+    }
+    return new PebblesPath(this._path.concat(tail.split(".")))
+  })
+  .method(function cd(dest) {
+    var cloned = this._path.slice();
+    var newPath = path.join(cloned.join(path.sep), dest).split(path.sep).filter(function (p) {
+      return !(p === '' || p === '.' || p === '..')
+    });
+    return new PebblesPath(newPath)
+  })
+  .method(function child(oid) {
+    var cloned = this._path.slice();
+    cloned.push(oid);
+    return new PebblesPath(cloned)
+  })
+  .getter(function last() {
+    return this._path[this._path.length - 1];
+  })
+  .getter(function first() {
+    return this._path[0];
+  })
+  .method(function toArray() {
+    return this._path.slice();
+  })
+  .method(function toString() {
+    return this._path.join(".")
   });
-  return new PebblesPath(newPath)
-};
-
-PebblesPath.prototype.child = function child(oid) {
-  var cloned = this._path.slice();
-  cloned.push(oid);
-  return new PebblesPath(cloned)
-};
-
-PebblesPath.prototype.last = function last() {
-  return this._path[this._path.length - 1]
-};
-
-PebblesPath.prototype.toArray = function toArray() {
-  return this._path.slice();
-};
-
-PebblesPath.prototype.first = function first() {
-  return this._path[0]
-};
 
 module.exports = PebblesPath;
