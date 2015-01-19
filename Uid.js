@@ -12,7 +12,7 @@ var MATCH_OID = 4;
 
 var slice = [].slice;
 
-var PebblesPath = require("./path");
+var PebblesPath = require("./Path");
 
 function Uid(klass, path, oid) {
   var args = slice.call(arguments, 0);
