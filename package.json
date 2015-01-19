@@ -1,6 +1,6 @@
 {
   "name": "pebbles-uid",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Utility belt for working with Pebbles based Uids",
   "main": "index.js",
   "scripts": {
