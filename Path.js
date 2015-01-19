@@ -21,51 +21,51 @@ function PebblesPath(path) {
 }
 
 prop(PebblesPath.prototype)
-  .method(function set(index, label) {
+  .method('set', function(index, label) {
     var cloned = this._path.slice();
     cloned[index] = label;
     return new PebblesPath(cloned)
   })
-  .getter(function isEmpty() {
+  .getter('isEmpty', function() {
     return this._path.length === 0;
   })
-  .getter(function realm() {
+  .getter('realm', function () {
     return this._path[0]
   })
-  .getter(function parent() {
+  .getter('parent', function () {
     var cloned = this._path.slice();
     cloned.pop();
     return new PebblesPath(cloned);
   })
-  .method(function concat(tail) {
+  .method('concat', function (tail) {
     var args = slice.call(arguments);
     if (args.length > 1) {
       return new PebblesPath(this._path.concat(args));
     }
     return new PebblesPath(this._path.concat(tail.split(".")))
   })
-  .method(function cd(dest) {
+  .method('cd', function (dest) {
     var cloned = this._path.slice();
     var newPath = path.join(cloned.join(path.sep), dest).split(path.sep).filter(function (p) {
       return !(p === '' || p === '.' || p === '..')
     });
     return new PebblesPath(newPath)
   })
-  .method(function child(oid) {
+  .method('child', function (oid) {
     var cloned = this._path.slice();
     cloned.push(oid);
     return new PebblesPath(cloned)
   })
-  .getter(function last() {
+  .getter('last', function () {
     return this._path[this._path.length - 1];
   })
-  .getter(function first() {
+  .getter('first', function () {
     return this._path[0];
   })
-  .method(function toArray() {
+  .method('toArray', function () {
     return this._path.slice();
   })
-  .method(function toString() {
+  .method('toString', function () {
     return this._path.join(".")
   });
 

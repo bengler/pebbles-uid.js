@@ -39,17 +39,17 @@ prop(Uid.prototype)
   .getter('klass', '_')
   .getter('path', '_')
   .getter('oid', '_')
-  .getter(function parent() {
+  .getter('parent', function() {
     if (this._path.isEmpty) throw new Error('Cannot get parent of an uid that is already at the top level: "' + this + '"');
     var parentOid = this._path.last;
     return new Uid(this._klass, this._path.parent, parentOid);
   })
-  .getter(function children() {
+  .getter('children', function () {
     var oid = this._oid;
     if (!isDefined(oid)) throw new Error("Cannot get child path of an uid without an oid");
     return new Uid(this._klass, this._path.child(oid));
   })
-  .method(function validate() {
+  .method('validate', function validate() {
     var args = slice.call(arguments, 0);
     if (args.length === 0) {
       return this.validate('klass', 'path', 'oid')
@@ -66,7 +66,7 @@ prop(Uid.prototype)
     }
     return this;
   })
-  .method('with', function _with() {
+  .method('with', function() {
     var args = slice.call(arguments, 0);
     if (args.length === 2) {
       var w = {};
@@ -82,13 +82,13 @@ prop(Uid.prototype)
     return new Uid(klass, path, oid);
   })
   .alias('set', 'with')
-  .method(function clone() {
+  .method('clone', function () {
     return this.with();
   })
-  .method(function get(prop) {
+  .method('get', function (prop) {
     return this['_' + prop];
   })
-  .method(function toString() {
+  .method('toString', function () {
     var oid = this._oid;
     return "" + (this._klass || '*') + ":" + (this._path || '') + (oid ? '$' + oid : '');
   });
