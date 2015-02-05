@@ -30,7 +30,7 @@ function parseConfig(name, config) {
 
 function prop(target) {
   var self = {
-    prop: function define(name, config) {
+    prop: function (name, config) {
       if (typeof name === 'function') {
         return this.method(name);
       }
@@ -40,7 +40,7 @@ function prop(target) {
       Object.defineProperty(target, name, parseConfig(name, config))
       return self;
     },
-    method: function method(name, method) {
+    method: function (name, method) {
       if (typeof name === 'function') {
         method = name;
         name = method.name;
@@ -52,7 +52,7 @@ function prop(target) {
 
       return self;
     },
-    getter: function getter(name, getter) {
+    getter: function (name, getter) {
       if (typeof name === 'function') {
         getter = name;
         name = getter.name;
@@ -69,7 +69,7 @@ function prop(target) {
       Object.defineProperty(target, name, { get: getter });
       return self;
     },
-    setter: function setter(name, setter) {
+    setter: function (name, setter) {
       if (typeof name === 'function') {
         setter = name;
         name = setter.name;
@@ -86,7 +86,7 @@ function prop(target) {
       Object.defineProperty(target, name, { set: setter });
       return self;
     },
-    alias: function alias(to, from) {
+    alias: function (to, from) {
       target[to] = target[from];
       return self;
     }
