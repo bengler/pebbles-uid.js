@@ -1,5 +1,5 @@
 {
-  "name": "pebbles-uid",
+  "name": "@bengler/pebbles-uid",
   "version": "1.0.4",
   "description": "Utility belt for working with Pebbles based Uids",
   "main": "index.js",
